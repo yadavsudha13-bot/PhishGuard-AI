@@ -28,11 +28,35 @@ int main(){
 
     cout<<"Keywords found: "<<endl;
 
-for(string word : keywords){
+    int score = 0;
+
+    if(url.length() > 30){
+        score += 20;
+    }
+    score += hyphens * 10;
+
+    for(string word : keywords){
     if(url.find(word) != string::npos){
         cout << word << " found" << endl;
+
+        if(word == "login" || word == "verify"){
+            score += 20;
+        }else{
+            score += 15;
+        }
     }
 }
+    cout<<"\nRisk Score: "<<score<<"/100"<<endl;
+
+    if(score < 30){
+        cout<<"Verdict : Safe"<<endl;
+    }
+    else if(score < 60){
+        cout<<"Verdict : Suspicious"<<endl;
+    }
+    else{
+        cout<<"Verdict : Dangerous"<<endl;
+    }
 
     return 0;
 }
