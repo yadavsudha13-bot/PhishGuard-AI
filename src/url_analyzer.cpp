@@ -1,5 +1,47 @@
 #include<iostream>
+#include<ctype.h>
 using namespace std;
+int countDots(string url){
+    int dots = 0;
+    for(char ch : url){
+        if(ch == '.'){
+            dots++;
+        }
+    }
+    return dots;
+}
+int countHyphens(string url){
+    int hyphens = 0;
+    for(char ch : url){
+        if(ch == '-'){
+            hyphens++;
+        }
+    }
+    return hyphens;
+}
+void printVedict(int score){
+     if(score < 30){
+        cout<<"Verdict : Safe"<<endl;
+    }
+    else if(score < 60){
+        cout<<"Verdict : Suspicious"<<endl;
+    }
+    else{
+        cout<<"Verdict : Dangerous"<<endl;
+    }
+}
+bool containsIPaddress(string url){
+    int digits = 0;
+    for(char ch : url){
+        if(isdigit(ch)){
+            digits++;
+        }
+    }
+    if(digits >= 4 && countDots(url) >=3){
+        return true;
+    }
+    return false;
+}
 int main(){
     string url;
 
@@ -10,18 +52,10 @@ int main(){
 
     cout<<"URL length: "<<url.length()<<endl;
 
-    int dot = 0; 
-    int hyphens = 0;
+    int dots = countDots(url);
+    int hyphens = countHyphens(url);
 
-    for(char ch : url){
-        if(ch == '.'){
-            dot++;
-        }
-        if(ch == '-'){
-            hyphens++;
-        }
-    }
-    cout<<"Dot: "<<dot<<endl;
+    cout<<"Dot: "<<dots<<endl;
     cout<<"Hyphens: "<<hyphens<<endl;
 
     string keywords[] = {"login", "verify", "secure", "update", "banking", "account"};
@@ -46,17 +80,13 @@ int main(){
         }
     }
 }
+    if(containsIPaddress(url)){
+        cout<<"IP Address detected!"<<endl;
+        score += 30;
+    }
     cout<<"\nRisk Score: "<<score<<"/100"<<endl;
 
-    if(score < 30){
-        cout<<"Verdict : Safe"<<endl;
-    }
-    else if(score < 60){
-        cout<<"Verdict : Suspicious"<<endl;
-    }
-    else{
-        cout<<"Verdict : Dangerous"<<endl;
-    }
+    printVedict(score);
 
     return 0;
 }
