@@ -1,92 +1,160 @@
-#include<iostream>
-#include<ctype.h>
+#include <iostream>
+#include <cctype>
 using namespace std;
-int countDots(string url){
+int countDots(string url)
+{
     int dots = 0;
-    for(char ch : url){
-        if(ch == '.'){
+    for (char ch : url)
+    {
+        if (ch == '.')
+        {
             dots++;
         }
     }
     return dots;
 }
-int countHyphens(string url){
+int countHyphens(string url)
+{
     int hyphens = 0;
-    for(char ch : url){
-        if(ch == '-'){
+    for (char ch : url)
+    {
+        if (ch == '-')
+        {
             hyphens++;
         }
     }
     return hyphens;
 }
-void printVedict(int score){
-     if(score < 30){
-        cout<<"Verdict : Safe"<<endl;
+void printVerdict(int score)
+{
+    if (score < 30)
+    {
+        cout << "Verdict : Safe" << endl;
     }
-    else if(score < 60){
-        cout<<"Verdict : Suspicious"<<endl;
+    else if (score < 60)
+    {
+        cout << "Verdict : Suspicious" << endl;
     }
-    else{
-        cout<<"Verdict : Dangerous"<<endl;
+    else
+    {
+        cout << "Verdict : Dangerous" << endl;
     }
 }
-bool containsIPaddress(string url){
+bool containsIPaddress(string url)
+{
     int digits = 0;
-    for(char ch : url){
-        if(isdigit(ch)){
+    for (char ch : url)
+    {
+        if (isdigit(ch))
+        {
             digits++;
         }
     }
-    if(digits >= 4 && countDots(url) >=3){
+    if (digits >= 4 && countDots(url) >= 3)
+    {
         return true;
     }
     return false;
 }
-int main(){
+bool containsAtSymbol(string url)
+{
+    return url.find('@') != string::npos;
+}
+bool hasTooManyDots(int dots)
+{
+    return dots > 3;
+}
+bool hasLongURL(string url)
+{
+    return url.length() > 30;
+}
+bool usesHTTPS(string url)
+{
+    return url.find("https://") == 0;
+}
+bool hasSuspiciousTLD(string url)
+{
+    return url.find(".xyz") != string::npos ||
+           url.find(".top") != string::npos ||
+           url.find(".click") != string::npos;
+}
+int main()
+{
     string url;
 
-    cout<<"Enter URL: ";
-    cin>>url;
+    cout << "Enter URL: ";
+    getline(cin, url);
 
-    cout<<"You entered: "<<url<<endl;
+    cout << "You entered: " << url << endl;
 
-    cout<<"URL length: "<<url.length()<<endl;
+    cout << "URL length: " << url.length() << endl;
 
     int dots = countDots(url);
     int hyphens = countHyphens(url);
 
-    cout<<"Dot: "<<dots<<endl;
-    cout<<"Hyphens: "<<hyphens<<endl;
+    cout << "Dot: " << dots << endl;
+    cout << "Hyphens: " << hyphens << endl;
 
     string keywords[] = {"login", "verify", "secure", "update", "banking", "account"};
 
-    cout<<"Keywords found: "<<endl;
+    cout << "Keywords found: " << endl;
 
     int score = 0;
 
-    if(url.length() > 30){
+    if (hasLongURL(url))
+    {
         score += 20;
     }
     score += hyphens * 10;
 
-    for(string word : keywords){
-    if(url.find(word) != string::npos){
-        cout << word << " found" << endl;
+    for (string word : keywords)
+    {
+        if (url.find(word) != string::npos)
+        {
+            cout << word << " found" << endl;
 
-        if(word == "login" || word == "verify"){
-            score += 20;
-        }else{
-            score += 15;
+            if (word == "login" || word == "verify")
+            {
+                score += 20;
+            }
+            else
+            {
+                score += 15;
+            }
         }
     }
-}
-    if(containsIPaddress(url)){
-        cout<<"IP Address detected!"<<endl;
+    if (containsIPaddress(url))
+    {
+        cout << "IP Address detected!" << endl;
         score += 30;
     }
-    cout<<"\nRisk Score: "<<score<<"/100"<<endl;
+    if (containsAtSymbol(url))
+    {
+        cout << "@ Symbol detected!" << endl;
+        score += 25;
+    }
+    if (hasTooManyDots(dots))
+    {
+        cout << "Too many dots detected!" << endl;
+        score += 15;
+    }
+    if (usesHTTPS(url))
+    {
+        cout << "HTTPS detected" << endl;
+    }
+    else
+    {
+        cout << "Not using HTTPS" << endl;
+        score += 10;
+    }
+    if(hasSuspiciousTLD(url))
+    {
+        cout << "Suspicious TLD detected!" << endl;
+        score += 20;
+    }
+    cout << "\nRisk Score: " << score << "/100" << endl;
 
-    printVedict(score);
+    printVerdict(score);
 
     return 0;
 }
