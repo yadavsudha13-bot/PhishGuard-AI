@@ -1,6 +1,13 @@
 #include <iostream>
 #include <cctype>
+#include <algorithm>
+#include <string>
 using namespace std;
+string toLowercase(string str)
+{
+    transform(str.begin(), str.end(), str.begin(), ::tolower);
+    return str;
+}
 int countDots(string url)
 {
     int dots = 0;
@@ -78,6 +85,28 @@ bool hasSuspiciousTLD(string url)
            url.find(".top") != string::npos ||
            url.find(".click") != string::npos;
 }
+string extractDomain(string url)
+{
+    size_t start = url.find("://");
+
+    if(start != string::npos)
+    {
+        start += 3;
+    }
+    else
+    {
+        start = 0;
+    }
+
+    size_t end = url.find('/', start);
+
+    if(end == string::npos)
+    {
+        return url.substr(start);
+    }
+
+    return url.substr(start, end - start);
+}
 int main()
 {
     string url;
@@ -88,6 +117,8 @@ int main()
     cout << "You entered: " << url << endl;
 
     cout << "URL length: " << url.length() << endl;
+
+    url = toLowercase(url);
 
     int dots = countDots(url);
     int hyphens = countHyphens(url);
@@ -147,11 +178,17 @@ int main()
         cout << "Not using HTTPS" << endl;
         score += 10;
     }
-    if(hasSuspiciousTLD(url))
+    if (hasSuspiciousTLD(url))
     {
         cout << "Suspicious TLD detected!" << endl;
         score += 20;
     }
+    string domain = extractDomain(url);
+
+    cout << "Domain: " << domain << endl;
+
+    score = min(score, 100);
+
     cout << "\nRisk Score: " << score << "/100" << endl;
 
     printVerdict(score);
