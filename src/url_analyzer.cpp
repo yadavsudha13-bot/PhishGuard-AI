@@ -71,6 +71,20 @@ bool hasTooManyDots(int dots)
 {
     return dots > 3;
 }
+bool hasTooManyDigits(string url)
+{
+    int digits = 0;
+
+    for(char ch : url)
+    {
+        if(isdigit(ch))
+        {
+            digits++;
+        }
+    }
+
+    return digits > 5;
+}
 bool hasLongURL(string url)
 {
     return url.length() > 30;
@@ -147,6 +161,7 @@ bool isShortenedURL(string domain)
 
     return false;
 }
+
 int main()
 {
     string url;
@@ -209,6 +224,11 @@ int main()
         cout << "Too many dots detected!" << endl;
         score += 15;
     }
+    if(hasTooManyDigits(url))
+{
+    cout << "Too many digits detected!" << endl;
+    score += 15;
+}
     if (usesHTTPS(url))
     {
         cout << "HTTPS detected" << endl;
