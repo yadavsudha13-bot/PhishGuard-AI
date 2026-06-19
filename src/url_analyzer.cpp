@@ -209,6 +209,21 @@ int main()
             }
         }
     }
+    int keywordCount = 0;
+
+for(string word : keywords)
+{
+    if(url.find(word) != string::npos)
+    {
+        keywordCount++;
+    }
+}
+
+if(keywordCount >= 3)
+{
+    cout << "Multiple suspicious keywords detected!" << endl;
+    score += 15;
+}
     if (containsIPaddress(url))
     {
         cout << "IP Address detected!" << endl;
