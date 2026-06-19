@@ -107,6 +107,26 @@ string extractDomain(string url)
 
     return url.substr(start, end - start);
 }
+bool containsBrandName(string domain)
+{
+    string brands[] = {
+        "paypal",
+        "google",
+        "amazon",
+        "microsoft",
+        "facebook"
+    };
+
+    for(string brand : brands)
+    {
+        if(domain.find(brand) != string::npos)
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
 int main()
 {
     string url;
@@ -186,6 +206,12 @@ int main()
     string domain = extractDomain(url);
 
     cout << "Domain: " << domain << endl;
+
+if(containsBrandName(domain))
+{
+    cout << "Brand name detected in domain!" << endl;
+    score += 25;
+}
 
     score = min(score, 100);
 
