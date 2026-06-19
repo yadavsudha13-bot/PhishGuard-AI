@@ -127,6 +127,26 @@ bool containsBrandName(string domain)
 
     return false;
 }
+bool isShortenedURL(string domain)
+{
+    string shorteners[] = {
+        "bit.ly",
+        "tinyurl.com",
+        "t.co",
+        "goo.gl",
+        "is.gd"
+    };
+
+    for(string site : shorteners)
+    {
+        if(domain == site)
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
 int main()
 {
     string url;
@@ -211,6 +231,11 @@ if(containsBrandName(domain))
 {
     cout << "Brand name detected in domain!" << endl;
     score += 25;
+}
+if(isShortenedURL(domain))
+{
+    cout << "URL shortener detected!" << endl;
+    score += 20;
 }
 
     score = min(score, 100);
