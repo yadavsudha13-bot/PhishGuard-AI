@@ -75,9 +75,9 @@ bool hasTooManyDigits(string url)
 {
     int digits = 0;
 
-    for(char ch : url)
+    for (char ch : url)
     {
-        if(isdigit(ch))
+        if (isdigit(ch))
         {
             digits++;
         }
@@ -103,7 +103,7 @@ string extractDomain(string url)
 {
     size_t start = url.find("://");
 
-    if(start != string::npos)
+    if (start != string::npos)
     {
         start += 3;
     }
@@ -114,7 +114,7 @@ string extractDomain(string url)
 
     size_t end = url.find('/', start);
 
-    if(end == string::npos)
+    if (end == string::npos)
     {
         return url.substr(start);
     }
@@ -128,12 +128,11 @@ bool containsBrandName(string domain)
         "google",
         "amazon",
         "microsoft",
-        "facebook"
-    };
+        "facebook"};
 
-    for(string brand : brands)
+    for (string brand : brands)
     {
-        if(domain.find(brand) != string::npos)
+        if (domain.find(brand) != string::npos)
         {
             return true;
         }
@@ -148,12 +147,11 @@ bool isShortenedURL(string domain)
         "tinyurl.com",
         "t.co",
         "goo.gl",
-        "is.gd"
-    };
+        "is.gd"};
 
-    for(string site : shorteners)
+    for (string site : shorteners)
     {
-        if(domain == site)
+        if (domain == site)
         {
             return true;
         }
@@ -199,10 +197,14 @@ int main()
     }
     score += hyphens * 10;
 
+    int keywordCount = 0;
+
     for (string word : keywords)
     {
         if (url.find(word) != string::npos)
         {
+            keywordCount++;
+
             cout << word << " found" << endl;
 
             if (word == "login" || word == "verify")
@@ -215,21 +217,12 @@ int main()
             }
         }
     }
-    int keywordCount = 0;
 
-for(string word : keywords)
-{
-    if(url.find(word) != string::npos)
+    if (keywordCount >= 3)
     {
-        keywordCount++;
+        cout << "Multiple suspicious keywords detected!" << endl;
+        score += 15;
     }
-}
-
-if(keywordCount >= 3)
-{
-    cout << "Multiple suspicious keywords detected!" << endl;
-    score += 15;
-}
     if (containsIPaddress(url))
     {
         cout << "IP Address detected!" << endl;
@@ -245,11 +238,11 @@ if(keywordCount >= 3)
         cout << "Too many dots detected!" << endl;
         score += 15;
     }
-    if(hasTooManyDigits(url))
-{
-    cout << "Too many digits detected!" << endl;
-    score += 15;
-}
+    if (hasTooManyDigits(url))
+    {
+        cout << "Too many digits detected!" << endl;
+        score += 15;
+    }
     if (usesHTTPS(url))
     {
         cout << "HTTPS detected" << endl;
@@ -268,21 +261,21 @@ if(keywordCount >= 3)
 
     cout << "Domain: " << domain << endl;
 
-if(containsBrandName(domain))
-{
-    cout << "Brand name detected in domain!" << endl;
-    score += 25;
-}
-if(isShortenedURL(domain))
-{
-    cout << "URL shortener detected!" << endl;
-    score += 20;
-}
-if(hasSuspiciousExtension(url))
-{
-    cout << "Suspicious file extension detected!" << endl;
-    score += 20;
-}
+    if (containsBrandName(domain))
+    {
+        cout << "Brand name detected in domain!" << endl;
+        score += 25;
+    }
+    if (isShortenedURL(domain))
+    {
+        cout << "URL shortener detected!" << endl;
+        score += 20;
+    }
+    if (hasSuspiciousExtension(url))
+    {
+        cout << "Suspicious file extension detected!" << endl;
+        score += 20;
+    }
     score = min(score, 100);
 
     cout << "\nRisk Score: " << score << "/100" << endl;
