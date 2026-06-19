@@ -161,7 +161,13 @@ bool isShortenedURL(string domain)
 
     return false;
 }
-
+bool hasSuspiciousExtension(string url)
+{
+    return url.find(".exe") != string::npos ||
+           url.find(".zip") != string::npos ||
+           url.find(".scr") != string::npos ||
+           url.find(".bat") != string::npos;
+}
 int main()
 {
     string url;
@@ -272,7 +278,11 @@ if(isShortenedURL(domain))
     cout << "URL shortener detected!" << endl;
     score += 20;
 }
-
+if(hasSuspiciousExtension(url))
+{
+    cout << "Suspicious file extension detected!" << endl;
+    score += 20;
+}
     score = min(score, 100);
 
     cout << "\nRisk Score: " << score << "/100" << endl;
